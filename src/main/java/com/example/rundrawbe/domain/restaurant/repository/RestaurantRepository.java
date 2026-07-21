@@ -1,9 +1,9 @@
 package com.example.rundrawbe.domain.restaurant.repository;
 
-import com.example.rundrawbe.domain.restaurant.entity.CourseRestaurant;
+import com.example.rundrawbe.domain.restaurant.entity.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface RestaurantRepository extends JpaRepository<CourseRestaurant, Long> {
+public interface RestaurantRepository extends JpaRepository<Restaurant, Long> {
 }

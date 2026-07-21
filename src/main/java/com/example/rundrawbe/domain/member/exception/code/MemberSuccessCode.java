@@ -9,10 +9,8 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum MemberSuccessCode implements BaseSuccessCode {
 
-    COURSE_GET_SUCCESS(HttpStatus.OK, "COURSE200_1", "성공적으로 코스를 조회했습니다."),
-    COURSE_UPDATE_SUCCESS(HttpStatus.OK, "COURSE200_2", "성공적으로 코스를 수정했습니다."),
-    COURSE_DELETE_SUCCESS(HttpStatus.OK, "COURSE200_3", "성공적으로 코스를 삭제했습니다."),
-    COURSE_CREATE_SUCCESS(HttpStatus.CREATED, "COURSE201_1", "성공적으로 코스를 생성했습니다.");
+    COURSE_GET_SUCCESS(HttpStatus.OK, "COURSE200_1", "성공적으로 코스를 조회했습니다.");
+    // 위는 예시로 이런식으로 에러 코드만들어서 사용하시면 됩니다!
 
     private final HttpStatus status;
     private final String code;
