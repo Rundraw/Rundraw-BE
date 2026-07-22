@@ -1,5 +1,10 @@
 package com.example.rundrawbe.domain.member.service;
 
+import com.example.rundrawbe.domain.member.dto.MemberReqDTO;
+import com.example.rundrawbe.domain.member.entity.Member;
+import com.example.rundrawbe.domain.member.exception.MemberException;
+import com.example.rundrawbe.domain.member.exception.code.MemberErrorCode;
+import com.example.rundrawbe.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,4 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @RequiredArgsConstructor
 public class MemberService {
+
+    private final MemberRepository memberRepository;
+
+    // 닉네임 설정
+    public String updateName(Long memberId, MemberReqDTO.nickname dto) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        if(memberRepository.existsByName(dto.nickname())){
+            throw new MemberException(MemberErrorCode.MEMBER_NAME_DUPLICATE);
+        }
+        member.updateName(dto.nickname());
+        return dto.nickname();
+    }
 }
