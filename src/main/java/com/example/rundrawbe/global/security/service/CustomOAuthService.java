@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import java.util.Map;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -57,7 +58,11 @@ public class CustomOAuthService extends DefaultOAuth2UserService {
         // DB 저장: 있다면 그 데이터 가져오고 없으면 새로 저장
         Member member = memberRepository.findBySocialTypeAndSocialUid(providerId, socialUid)
                 .orElseGet(() -> {
-                    Member newMember = MemberConverter.toMember(dto);
+                    String name;
+                    do {
+                        name = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
+                    } while (memberRepository.existsByName(name));
+                    Member newMember = MemberConverter.toMember(dto, name);
                     memberRepository.save(newMember);
                     return newMember;
                 });

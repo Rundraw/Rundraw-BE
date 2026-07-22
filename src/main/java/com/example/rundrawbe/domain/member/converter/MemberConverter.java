@@ -6,9 +6,9 @@ import com.example.rundrawbe.global.security.dto.OAuthDTO;
 
 public class MemberConverter {
 
-    public static Member toMember(OAuthDTO dto) {
+    public static Member toMember(OAuthDTO dto, String name) {
         return Member.builder()
-                .name(dto.getName())
+                .name(name)
                 .socialType(dto.getSocialType())
                 .socialUid(dto.getSocialUid())
                 .email(dto.getSocialEmail())

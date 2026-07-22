@@ -21,6 +21,7 @@ public class Member extends BaseEntity {
     private Long id;
 
     @NotBlank
+    @Column(unique = true)
     private String name;
 
     @NotBlank
@@ -33,4 +34,9 @@ public class Member extends BaseEntity {
     @Email
     @NotBlank
     private String email;
+
+    // 닉네임 설정
+    public void updateName(String nickname) {
+        this.name = nickname;
+    }
 }
