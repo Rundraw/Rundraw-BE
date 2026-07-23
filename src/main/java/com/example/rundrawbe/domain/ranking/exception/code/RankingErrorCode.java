@@ -15,8 +15,9 @@ public enum RankingErrorCode implements BaseErrorCode {
     COMMENT_ALREADY_DELETED(HttpStatus.NOT_FOUND, "COMMENT404_2", "이미 삭제된 댓글입니다."),
     QUERY_NOT_VALID(HttpStatus.NOT_FOUND, "QUERY404_1", "해당 쿼리을 찾을 수 없습니다."),
     LIKE_ALREADY_CREATED(HttpStatus.NOT_FOUND, "LIKE404_1", "이미 좋아요된 코스입니다."),
-    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "LIKE404_1", "해당 좋아요를 찾을 수 없습니다.");
-
+    LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "LIKE404_1", "해당 좋아요를 찾을 수 없습니다."),
+    BOOKMARK_ALREADY_CREATED(HttpStatus.NOT_FOUND, "BOOKMARK404_1", "이미 북마크된 코스입니다."),
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOKMARK404_1", "해당 북마크를 찾을 수 없습니다.");
 
     private final HttpStatus status;
     private final String code;

@@ -9,10 +9,12 @@ import com.example.rundrawbe.domain.ranking.dto.RankingReqDTO;
 import com.example.rundrawbe.domain.ranking.dto.RankingResDTO;
 import com.example.rundrawbe.domain.ranking.entity.Comment;
 import com.example.rundrawbe.domain.ranking.entity.CourseLike;
+import com.example.rundrawbe.domain.ranking.entity.CourseScrap;
 import com.example.rundrawbe.domain.ranking.exception.RankingException;
 import com.example.rundrawbe.domain.ranking.exception.code.RankingErrorCode;
 import com.example.rundrawbe.domain.ranking.repository.CommentRepository;
 import com.example.rundrawbe.domain.ranking.repository.CourseLikeRepository;
+import com.example.rundrawbe.domain.ranking.repository.CourseScrapRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -28,6 +30,7 @@ public class RankingService {
     private final CommentRepository commentRepository;
     private final CourseFinder courseFinder;
     private final CourseLikeRepository courseLikeRepository;
+    private final CourseScrapRepository courseScrapRepository;
 
     // 댓글 작성
     public Long createComment(Long courseId, RankingReqDTO.CreateComment dto, Member member) {
@@ -133,6 +136,28 @@ public class RankingService {
         CourseLike courseLike = courseLikeRepository.findByCourseAndMember(course, member)
                 .orElseThrow(() -> new RankingException(RankingErrorCode.LIKE_NOT_FOUND));
         courseLikeRepository.delete(courseLike);
+        return null;
+    }
+
+    // 북마크 생성
+    public Object createBookmark(Long courseId, Member member) {
+        Course course = courseFinder.findById(courseId);
+        // 중복 방지
+        if(courseScrapRepository.existsByCourse_IdAndMember_Id(course.getId(), member.getId())) {
+            throw new RankingException(RankingErrorCode.BOOKMARK_ALREADY_CREATED);
+        }
+        // 북마크 생성
+        CourseScrap courseScrap = RankingConverter.toCreateScrap(course, member);
+        courseScrapRepository.save(courseScrap);
+        return courseScrap.getId();
+    }
+
+    // 북마크 삭제
+    public Object deleteBookmark(Long courseId, Member member) {
+        Course course = courseFinder.findById(courseId);
+        CourseScrap courseScrap = courseScrapRepository.findByCourseAndMember(course, member)
+                .orElseThrow(() -> new RankingException(RankingErrorCode.BOOKMARK_NOT_FOUND));
+        courseScrapRepository.delete(courseScrap);
         return null;
     }
 }
