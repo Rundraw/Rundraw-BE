@@ -29,4 +29,9 @@ public class Comment extends BaseEntity {
 
     private String content;
 
+    // 댓글 수정
+    public void updateComment(String content) {
+        this.content = content;
+    }
+
 }

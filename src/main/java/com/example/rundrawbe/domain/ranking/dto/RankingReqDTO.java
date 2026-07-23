@@ -5,4 +5,7 @@ public class RankingReqDTO {
             String comment
     ){}
 
+    public record UpdateComment(
+            String comment
+    ){}
 }

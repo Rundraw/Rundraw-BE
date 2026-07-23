@@ -33,6 +33,18 @@ public class RankingController {
         return ApiResponse.onSuccess(code, rankingService.createComment(courseId, dto, authMember.getMember()));
     }
 
+    // 댓글 수정
+    @PatchMapping("/courses/{courseId}/comments/{commentId}")
+    public ApiResponse<Object> updateComment(
+            @PathVariable Long courseId,
+            @PathVariable Long commentId,
+            @RequestBody RankingReqDTO.UpdateComment dto,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.COMMENT_UPDATE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.updateComment(courseId,commentId, dto, authMember.getMember()));
+    }
+
 
 
 }
