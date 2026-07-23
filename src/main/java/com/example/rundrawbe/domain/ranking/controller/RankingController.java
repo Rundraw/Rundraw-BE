@@ -64,4 +64,46 @@ public class RankingController {
         BaseSuccessCode code = RankingSuccessCode.COMMENT_GET_SUCCESS;
         return ApiResponse.onSuccess(code, rankingService.getComment(courseId, pageSize, cursor, query));
     }
+
+    // 좋아요 생성
+    @PostMapping("/courses/{courseId}/like")
+    public ApiResponse<Object> createLike(
+            @PathVariable Long courseId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.LIKE_CREATE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.createLike(courseId, authMember.getMember()));
+    }
+
+
+    // 좋아요 삭제
+    @DeleteMapping("/courses/{courseId}/like")
+    public ApiResponse<Object> deleteLike(
+            @PathVariable Long courseId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.LIKE_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.deleteLike(courseId, authMember.getMember()));
+    }
+
+    // 북마크 생성
+    @PostMapping("/courses/{courseId}/bookmark")
+    public ApiResponse<Object> createBookmark(
+            @PathVariable Long courseId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_CREATE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.createBookmark(courseId, authMember.getMember()));
+    }
+
+
+    // 북마크 삭제
+    @DeleteMapping("/courses/{courseId}/bookmark")
+    public ApiResponse<Object> deleteBookmark(
+            @PathVariable Long courseId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.deleteBookmark(courseId, authMember.getMember()));
+    }
 }

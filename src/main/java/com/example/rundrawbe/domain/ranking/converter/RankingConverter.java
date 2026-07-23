@@ -5,6 +5,8 @@ import com.example.rundrawbe.domain.member.entity.Member;
 import com.example.rundrawbe.domain.ranking.dto.RankingReqDTO;
 import com.example.rundrawbe.domain.ranking.dto.RankingResDTO;
 import com.example.rundrawbe.domain.ranking.entity.Comment;
+import com.example.rundrawbe.domain.ranking.entity.CourseLike;
+import com.example.rundrawbe.domain.ranking.entity.CourseScrap;
 
 import java.util.List;
 
@@ -43,6 +45,20 @@ public class RankingConverter {
                 .memberName(comment.getMember().getName())
                 .createdAt(comment.getCreatedAt())
                 .content(comment.getContent())
+                .build();
+    }
+
+    public static CourseLike toCreateLike(Course course, Member member) {
+        return CourseLike.builder()
+                .member(member)
+                .course(course)
+                .build();
+    }
+
+    public static CourseScrap toCreateScrap(Course course, Member member) {
+        return CourseScrap.builder()
+                .member(member)
+                .course(course)
                 .build();
     }
 }
