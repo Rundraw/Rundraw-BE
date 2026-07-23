@@ -1,11 +1,13 @@
 package com.example.rundrawbe.domain.ranking.controller;
 
 import com.example.rundrawbe.domain.ranking.dto.RankingReqDTO;
+import com.example.rundrawbe.domain.ranking.dto.RankingResDTO;
 import com.example.rundrawbe.domain.ranking.exception.code.RankingSuccessCode;
 import com.example.rundrawbe.domain.ranking.service.RankingService;
 import com.example.rundrawbe.global.apiPayload.ApiResponse;
 import com.example.rundrawbe.global.apiPayload.code.BaseSuccessCode;
 import com.example.rundrawbe.global.security.entity.AuthMember;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -49,5 +51,17 @@ public class RankingController {
     ){
         BaseSuccessCode code = RankingSuccessCode.COMMENT_DELETE_SUCCESS;
         return ApiResponse.onSuccess(code, rankingService.deleteComment(courseId,commentId, authMember.getMember()));
+    }
+
+    // 댓글 조회
+    @GetMapping("/courses/{courseId}/comments")
+    public ApiResponse<RankingResDTO.Pagination<RankingResDTO.GetComment>> getComment(
+            @PathVariable Long courseId,
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor,
+            @RequestParam String query
+    ){
+        BaseSuccessCode code = RankingSuccessCode.COMMENT_GET_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.getComment(courseId, pageSize, cursor, query));
     }
 }
