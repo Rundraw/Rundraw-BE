@@ -4,11 +4,17 @@ import com.example.rundrawbe.domain.course.entity.Course;
 import com.example.rundrawbe.domain.member.entity.Member;
 import com.example.rundrawbe.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends BaseEntity {
     @Id
@@ -24,5 +30,15 @@ public class Comment extends BaseEntity {
     private Member member;
 
     private String content;
+
+    // 댓글 수정
+    public void updateComment(String content) {
+        this.content = content;
+    }
+
+    // 댓글 삭제
+    public void deleteComment() {
+        setDeletedAt(LocalDateTime.now());
+    }
 
 }
