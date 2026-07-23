@@ -1,17 +1,22 @@
 package com.example.rundrawbe.domain.record.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
+import com.example.rundrawbe.global.entity.PointBaseEntity;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @NoArgsConstructor
-public class CourseRecordPoint {
+public class CourseRecordPoint extends PointBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "course_record_id")
+    private CourseRecord courseRecord;
+
+    private LocalDateTime recordedAt;
 }
