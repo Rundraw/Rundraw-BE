@@ -64,4 +64,25 @@ public class RankingController {
         BaseSuccessCode code = RankingSuccessCode.COMMENT_GET_SUCCESS;
         return ApiResponse.onSuccess(code, rankingService.getComment(courseId, pageSize, cursor, query));
     }
+
+    // 좋아요 생성
+    @PostMapping("/courses/{courseId}/like")
+    public ApiResponse<Object> createLike(
+            @PathVariable Long courseId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.LIKE_CREATE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.createLike(courseId, authMember.getMember()));
+    }
+
+
+    // 좋아요 삭제
+    @DeleteMapping("/courses/{courseId}/like")
+    public ApiResponse<Object> deleteLike(
+            @PathVariable Long courseId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.LIKE_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.deleteLike(courseId, authMember.getMember()));
+    }
 }

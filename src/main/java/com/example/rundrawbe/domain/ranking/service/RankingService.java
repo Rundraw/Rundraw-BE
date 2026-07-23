@@ -8,9 +8,11 @@ import com.example.rundrawbe.domain.ranking.converter.RankingConverter;
 import com.example.rundrawbe.domain.ranking.dto.RankingReqDTO;
 import com.example.rundrawbe.domain.ranking.dto.RankingResDTO;
 import com.example.rundrawbe.domain.ranking.entity.Comment;
+import com.example.rundrawbe.domain.ranking.entity.CourseLike;
 import com.example.rundrawbe.domain.ranking.exception.RankingException;
 import com.example.rundrawbe.domain.ranking.exception.code.RankingErrorCode;
 import com.example.rundrawbe.domain.ranking.repository.CommentRepository;
+import com.example.rundrawbe.domain.ranking.repository.CourseLikeRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
@@ -25,6 +27,7 @@ public class RankingService {
     private final CourseRepository courseRepository;
     private final CommentRepository commentRepository;
     private final CourseFinder courseFinder;
+    private final CourseLikeRepository courseLikeRepository;
 
     // 댓글 작성
     public Long createComment(Long courseId, RankingReqDTO.CreateComment dto, Member member) {
@@ -109,5 +112,27 @@ public class RankingService {
                 nextCursor,
                 commentList.getNumberOfElements()
         );
+    }
+
+    // 좋아요 생성
+    public Object createLike(Long courseId, Member member) {
+        Course course = courseFinder.findById(courseId);
+        // 중복 방지
+        if(courseLikeRepository.existsByCourse_IdAndMember_Id(course.getId(), member.getId())) {
+            throw new RankingException(RankingErrorCode.LIKE_ALREADY_CREATED);
+        }
+        // 좋아요 생성
+        CourseLike courseLike = RankingConverter.toCreateLike(course, member);
+        courseLikeRepository.save(courseLike);
+        return courseLike.getId();
+    }
+
+    // 좋아요 삭제
+    public Object deleteLike(Long courseId, Member member) {
+        Course course = courseFinder.findById(courseId);
+        CourseLike courseLike = courseLikeRepository.findByCourseAndMember(course, member)
+                .orElseThrow(() -> new RankingException(RankingErrorCode.LIKE_NOT_FOUND));
+        courseLikeRepository.delete(courseLike);
+        return null;
     }
 }
