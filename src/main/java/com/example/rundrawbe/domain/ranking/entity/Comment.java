@@ -4,11 +4,15 @@ import com.example.rundrawbe.domain.course.entity.Course;
 import com.example.rundrawbe.domain.member.entity.Member;
 import com.example.rundrawbe.global.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
 @NoArgsConstructor
 public class Comment extends BaseEntity {
     @Id

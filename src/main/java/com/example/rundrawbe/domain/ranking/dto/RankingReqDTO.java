@@ -1,5 +1,8 @@
 package com.example.rundrawbe.domain.ranking.dto;
 
-public class RankingReqDTO { // client -> server
+public class RankingReqDTO {
+    public record CreateComment (
+            String comment
+    ){}
 
 }
