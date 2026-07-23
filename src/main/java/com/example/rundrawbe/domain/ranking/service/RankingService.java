@@ -48,6 +48,25 @@ public class RankingService {
         return null;
     }
 
-
-
+    // 댓글 삭제
+    public Object deleteComment(Long courseId, Long commentId, Member member) {
+        // 코스 조회
+        Course course = courseFinder.findById(courseId);
+        // 댓글 조회
+        Comment comment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new RankingException(RankingErrorCode.COMMENT_NOT_FOUND));
+        if(!commentRepository.existsByIdAndCourse_Id(commentId,course.getId())){
+            throw new RankingException(RankingErrorCode.COMMENT_NOT_FOUND);
+        }
+        if(comment.getDeletedAt()!=null){
+            throw new RankingException(RankingErrorCode.COMMENT_ALREADY_DELETED);
+        }
+        // 수정 권한 검토
+        if(!commentRepository.existsByIdAndMember_Id(commentId, member.getId())) {
+            throw new RankingException(RankingErrorCode.COMMENT_ACCESS_DENIED);
+        }
+        // 댓글 삭제
+        comment.deleteComment();
+        return null;
+    }
 }

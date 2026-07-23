@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -32,6 +34,11 @@ public class Comment extends BaseEntity {
     // 댓글 수정
     public void updateComment(String content) {
         this.content = content;
+    }
+
+    // 댓글 삭제
+    public void deleteComment() {
+        setDeletedAt(LocalDateTime.now());
     }
 
 }
