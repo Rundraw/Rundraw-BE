@@ -1,5 +1,13 @@
 package com.example.rundrawbe.domain.member.dto;
 
-public class MemberReqDTO { // client -> server
+import jakarta.validation.constraints.NotBlank;
+
+public class MemberReqDTO {
+
+    // 닉네임 설정
+    public record nickname(
+            @NotBlank
+            String nickname
+    ){}
 
 }

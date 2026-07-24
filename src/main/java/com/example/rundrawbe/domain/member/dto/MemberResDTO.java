@@ -1,5 +1,9 @@
 package com.example.rundrawbe.domain.member.dto;
 
-public class MemberResDTO {  // server -> client
+public class MemberResDTO {
+    public record Login(
+            String accessToken
+    ) {}
+
 
 }
