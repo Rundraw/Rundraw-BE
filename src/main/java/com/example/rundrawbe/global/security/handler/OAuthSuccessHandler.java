@@ -50,6 +50,11 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         );
 
         // 응답 출력
-        objectMapper.writeValue(response.getOutputStream(), responseBody);
+//        objectMapper.writeValue(response.getOutputStream(), responseBody);
+
+        // Android Deep Link 이동
+        response.sendRedirect(
+                "rundraw://login?token=" + accessToken
+        );
     }
 }
