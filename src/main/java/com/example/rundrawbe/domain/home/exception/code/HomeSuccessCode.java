@@ -9,8 +9,9 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum HomeSuccessCode implements BaseSuccessCode {
 
-    COURSE_GET_SUCCESS(HttpStatus.OK, "COURSE200_1", "성공적으로 코스를 조회했습니다.");
-    // 위는 예시로 이런식으로 에러 코드만들어서 사용하시면 됩니다!
+    MY_COURSE_VIEW_SUCCESS(HttpStatus.OK, "HOME200_1", "내 경로 조회에 성공했습니다."),
+    MY_RESTAURANT_VIEW_SUCCESS(HttpStatus.OK, "HOME200_2", "저장한 맛집 조회에 성공했습니다."),
+    GPS_ART_VIEW_SUCCESS(HttpStatus.OK, "HOME200_3", "인기 GPS 아트 조회에 성공했습니다.");
 
     private final HttpStatus status;
     private final String code;
