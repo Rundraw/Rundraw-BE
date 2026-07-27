@@ -3,10 +3,9 @@ package com.example.rundrawbe.domain.course.controller;
 import com.example.rundrawbe.domain.course.dto.CourseResDTO;
 import com.example.rundrawbe.domain.course.service.CourseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -17,5 +16,17 @@ public class CourseController {
     @GetMapping("/{courseId}")
     public CourseResDTO.Detail getDetail(@PathVariable Long courseId) {
         return courseService.getDetail(courseId);
+    }
+
+    @GetMapping("/search")
+    public List<CourseResDTO.Summary> search(@RequestParam String keyword) {
+        return courseService.search(keyword);
+    }
+
+    @GetMapping("/")
+    public List<CourseResDTO.Summary> getByLocation(
+            @RequestParam Double lat, @RequestParam Double lng, @RequestParam Double radius
+    ) {
+        return courseService.getByLocation(lat, lng, radius);
     }
 }
