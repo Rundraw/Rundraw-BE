@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 public class Course extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long courseId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_draft_id")
