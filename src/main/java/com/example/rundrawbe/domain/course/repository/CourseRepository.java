@@ -23,8 +23,8 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
         AND p.longitude BETWEEN :minLng AND :maxLng
     """)
     List<Course> findByLocation(
-            @Param("minLat") Double minLat, @Param("MaxLat") Double maxLat,
-            @Param("minLng") Double minLng, @Param("MaxLng") Double maxLng
+            @Param("minLat") Double minLat, @Param("maxLat") Double maxLat,
+            @Param("minLng") Double minLng, @Param("maxLng") Double maxLng
     );
 
 }

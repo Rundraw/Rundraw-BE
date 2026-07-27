@@ -21,7 +21,7 @@ public class CourseService {
                 .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 코스입니다: " + courseId));
 
         return new CourseResDTO.Detail(
-                course.getCourseId(),
+                course.getId(),
                 course.getName(),
                 course.getExperienceCount(),
                 course.getDescription(),
@@ -32,7 +32,7 @@ public class CourseService {
     public List<CourseResDTO.Summary> search(String keyword) {
         return courseRepository.findByNameContaining(keyword).stream()
                 .map(c -> new CourseResDTO.Summary(
-                        c.getCourseId(), c.getName(), c.getExperienceCount(), c.getDescription()
+                        c.getId(), c.getName(), c.getExperienceCount(), c.getDescription()
                 ))
                 .collect(Collectors.toList());
     }
@@ -45,7 +45,7 @@ public class CourseService {
 
         return courseRepository.findByLocation(minLat, maxLat, minLng, maxLng).stream()
                 .map(c -> new CourseResDTO.Summary(
-                        c.getCourseId(), c.getName(), c.getExperienceCount(), c.getDescription()
+                        c.getId(), c.getName(), c.getExperienceCount(), c.getDescription()
                 ))
                 .collect(Collectors.toList());
     }
