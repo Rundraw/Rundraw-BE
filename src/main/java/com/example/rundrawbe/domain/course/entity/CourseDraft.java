@@ -35,6 +35,7 @@ public class CourseDraft {
     private Boolean isSharing = false;
 
     @OneToMany(mappedBy = "courseDraft", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Builder.Default
     private List<DraftPoint> points = new ArrayList<>();
 
     @CreatedDate
