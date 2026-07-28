@@ -17,6 +17,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 
 @RequiredArgsConstructor
 public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
@@ -43,18 +45,19 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
         // 토큰 제작을 위해 OAuth 인증 객체에서 Member 추출 -> AuthMember 제작
         String accessToken = jwtUtil.createAccessToken(new AuthMember(member.getMember()));
 
-        // 응답 통일 객체 래핑
-        ApiResponse<MemberResDTO.Login> responseBody = ApiResponse.onSuccess(
-                code,
-                MemberConverter.toLogin(accessToken)
-        );
-
-        // 응답 출력
+//        // 테스트 코드(앱 연동X)
+//        // 응답 통일 객체 래핑
+//        ApiResponse<MemberResDTO.Login> responseBody = ApiResponse.onSuccess(
+//                code,
+//                MemberConverter.toLogin(accessToken)
+//        );
+//        // 응답 출력
 //        objectMapper.writeValue(response.getOutputStream(), responseBody);
+//        // 테스트 코드(앱 연동X)--end
 
-        // Android Deep Link 이동
+        // 앱 연동 코드
         response.sendRedirect(
-                "rundraw://login?token=" + accessToken
+                "rundraw://login?accessToken=" + URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
         );
     }
 }
