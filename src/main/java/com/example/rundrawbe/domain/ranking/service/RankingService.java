@@ -1,6 +1,7 @@
 package com.example.rundrawbe.domain.ranking.service;
 
 import com.example.rundrawbe.domain.course.entity.Course;
+import com.example.rundrawbe.domain.course.enums.LevelType;
 import com.example.rundrawbe.domain.course.repository.CourseRepository;
 import com.example.rundrawbe.domain.member.entity.Member;
 import com.example.rundrawbe.domain.ranking.component.CourseFinder;
@@ -159,5 +160,88 @@ public class RankingService {
                 .orElseThrow(() -> new RankingException(RankingErrorCode.BOOKMARK_NOT_FOUND));
         courseScrapRepository.delete(courseScrap);
         return null;
+    }
+
+    // 코스 랭킹순 조회
+    public RankingResDTO.Pagination<RankingResDTO.GetRanking> getRanking(
+            Integer pageSize,
+            String cursor
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, pageSize);
+        Slice<Course> courseList;
+        // 첫 페이지 조회
+        if (cursor == null || "-1".equals(cursor)) {
+            courseList = courseRepository.findAllByOrderByExperienceCountDescIdDesc(pageRequest);
+        } else {
+            String[] cursorSplit = cursor.split(":");
+            Long idCursor = Long.parseLong(cursorSplit[1]);
+            courseList = courseRepository.findByIdLessThanOrderByExperienceCountDescIdDesc(idCursor, pageRequest);
+        }
+
+        String nextCursor = null;
+
+        if (!courseList.isEmpty() && courseList.hasNext()) {
+            nextCursor = "id:" + courseList.getContent().getLast().getId();
+        }
+
+        return RankingConverter.toPagination(
+                courseList
+                        .map(RankingConverter::toGetRanking)
+                        .toList(),
+                courseList.hasNext(),
+                nextCursor,
+                courseList.getNumberOfElements()
+        );
+    }
+
+    // 코스 난이도 조회
+    public RankingResDTO.Pagination<RankingResDTO.GetRanking> getLevelCourses(
+            String level,
+            Integer pageSize,
+            String cursor
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, pageSize);
+        Slice<Course> courseList;
+        Long idCursor = null;
+
+        // 커서 처리
+        if (cursor != null && !"-1".equals(cursor)) {
+            String[] cursorSplit = cursor.split(":");
+            idCursor = Long.parseLong(cursorSplit[1]);
+        }
+
+        // 난이도 미선택 -> 전체 조회
+        if (level == null || level.isBlank()) {
+            if (idCursor == null) {
+                courseList = courseRepository.findAllByOrderByIdDesc(pageRequest);
+            } else {
+                courseList = courseRepository.findByIdLessThanOrderByIdDesc(idCursor, pageRequest);
+            }
+        } else {
+            LevelType levelType;
+            try {
+                levelType = LevelType.valueOf(level.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new RankingException(RankingErrorCode.LEVEL_NOT_VALID);
+            }
+            if (idCursor == null) {
+                courseList = courseRepository.findByLevelTag_LevelTypeOrderByIdDesc(levelType, pageRequest);
+            } else {
+                courseList = courseRepository.findByLevelTag_LevelTypeAndIdLessThanOrderByIdDesc(levelType, idCursor, pageRequest);
+            }
+        }
+        String nextCursor = null;
+        if (!courseList.isEmpty() && courseList.hasNext()) {
+            nextCursor = "id:" + courseList.getContent().getLast().getId();
+        }
+
+        return RankingConverter.toPagination(
+                courseList
+                        .map(RankingConverter::toGetRanking)
+                        .toList(),
+                courseList.hasNext(),
+                nextCursor,
+                courseList.getNumberOfElements()
+        );
     }
 }

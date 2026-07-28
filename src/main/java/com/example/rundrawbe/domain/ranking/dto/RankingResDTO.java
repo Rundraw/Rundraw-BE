@@ -25,4 +25,12 @@ public class RankingResDTO {
             String content,
             LocalDateTime createdAt
     ){}
+
+    // 코스 조회
+    @Builder
+    public record GetRanking(
+            Long id,
+            String name,
+            Integer experienceCount
+    ){}
 }

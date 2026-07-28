@@ -15,6 +15,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
+
 import java.util.Map;
 import java.util.UUID;
 
@@ -54,18 +55,39 @@ public class CustomOAuthService extends DefaultOAuth2UserService {
             }
             default -> throw new MemberException(MemberErrorCode.NOT_SUPPORT_SOCIAL_PROVIDER);
         }
+        boolean isNewMember = false;
 
         // DB 저장: 있다면 그 데이터 가져오고 없으면 새로 저장
-        Member member = memberRepository.findBySocialTypeAndSocialUid(providerId, socialUid)
-                .orElseGet(() -> {
-                    String name;
-                    do {
-                        name = UUID.randomUUID().toString().replace("-", "").substring(0, 6);
-                    } while (memberRepository.existsByName(name));
-                    Member newMember = MemberConverter.toMember(dto, name);
-                    memberRepository.save(newMember);
-                    return newMember;
-                });
-        return new OAuthMember(member, oAuthMember.getAttributes());
+        Member member =
+                memberRepository
+                        .findBySocialTypeAndSocialUid(
+                                providerId,
+                                socialUid
+                        )
+                        .orElse(null);
+
+        if (member == null) {
+            String name;
+            do {
+                name = UUID.randomUUID()
+                        .toString()
+                        .replace("-", "")
+                        .substring(0, 6);
+            } while (memberRepository.existsByName(name));
+
+            Member newMember =
+                    MemberConverter.toMember(
+                            dto,
+                            name
+                    );
+            memberRepository.save(newMember);
+            member = newMember;
+            isNewMember = true;
+        }
+        return new OAuthMember(
+                member,
+                oAuthMember.getAttributes(),
+                isNewMember
+        );
     }
 }

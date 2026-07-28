@@ -7,7 +7,6 @@ import com.example.rundrawbe.domain.ranking.service.RankingService;
 import com.example.rundrawbe.global.apiPayload.ApiResponse;
 import com.example.rundrawbe.global.apiPayload.code.BaseSuccessCode;
 import com.example.rundrawbe.global.security.entity.AuthMember;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -105,5 +104,26 @@ public class RankingController {
     ){
         BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
         return ApiResponse.onSuccess(code, rankingService.deleteBookmark(courseId, authMember.getMember()));
+    }
+
+    // 코스 랭킹순 조회
+    @GetMapping("/ranking/courses/rank")
+    public ApiResponse<Object> getRanking(
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.getRanking(pageSize, cursor));
+    }
+
+    // 코스 난이도 조회
+    @GetMapping("/ranking/courses")
+    public ApiResponse<Object> getLevelCourses(
+            @RequestParam(required = false) String level,
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.getLevelCourses(level, pageSize, cursor));
     }
 }
