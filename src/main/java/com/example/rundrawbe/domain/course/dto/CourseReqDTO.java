@@ -1,5 +1,19 @@
 package com.example.rundrawbe.domain.course.dto;
 
-public class CourseReqDTO { // client -> server
+import java.util.List;
 
+public class CourseReqDTO { // client -> server
+    // 그린 코스 저장 요청
+    public record CreateDraft(
+            String name,
+            Long memberId,
+            List<PointDTO> points
+    ) {}
+
+    // 좌표 하나
+    public record PointDTO(
+            Integer sequence,
+            Double latitude,
+            Double longitude
+    ) {}
 }
