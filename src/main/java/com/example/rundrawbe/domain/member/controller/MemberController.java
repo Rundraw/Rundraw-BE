@@ -28,5 +28,15 @@ public class MemberController {
         return ApiResponse.onSuccess(code, memberService.updateName(authMember.getMember().getId(), dto));
     }
 
+    // 닉네임 설정
+    @PostMapping("/users/me/name")
+    public ApiResponse<String> duplicateName(
+            @RequestBody @Valid MemberReqDTO.nickname dto,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = MemberSuccessCode.MEMBER_UPDATE_SUCCESS;
+        return ApiResponse.onSuccess(code, memberService.duplicateName(authMember.getMember().getId(), dto));
+    }
+
 
 }

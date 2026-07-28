@@ -61,4 +61,12 @@ public class RankingConverter {
                 .course(course)
                 .build();
     }
+
+    public static RankingResDTO.GetRanking toGetRanking(Course course){
+        return RankingResDTO.GetRanking.builder()
+                .id(course.getId())
+                .name(course.getName())
+                .experienceCount(course.getExperienceCount())
+                .build();
+    }
 }
