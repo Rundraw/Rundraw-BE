@@ -19,8 +19,13 @@ public class CourseController {
     }
 
     @GetMapping("/search")
-    public List<CourseResDTO.Summary> search(@RequestParam String keyword) {
-        return courseService.search(keyword);
+    public List<CourseResDTO.Summary> search(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "popular") String sort,
+            @RequestParam(required = false) Double lat,
+            @RequestParam(required = false) Double lng
+    ) {
+        return courseService.search(keyword, sort, lat, lng);
     }
 
     @GetMapping("/")

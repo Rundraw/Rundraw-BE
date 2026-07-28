@@ -10,8 +10,20 @@ import java.util.List;
 
 @Repository
 public interface CourseRepository extends JpaRepository<Course, Long> {
+    // 인기순은 Spring이 자동 처리, 거리순은 좌표까지 같이 가져오기
+
+    // 인기순 검색: Sort 파라미터를 받으면 Spring이 자동으로 ORDER BY 처리
     // SELECT * FROM course WHERE name LIKE '%keyword%'
-    List<Course> findByNameContaining(String keyword);
+    List<Course> findByNameContaining(String keyword, org.springframework.data.domain.Sort sort);
+
+    // 거리순 검색용 (코스 대표 좌표까지 필요해서 courseDraft까지 조인)
+    @Query("""
+        SELECT c FROM Course c
+        JOIN c.courseDraft cd
+        WHERE c.name LIKE %:keyword%
+    """)
+    List<Course> findByNameContainingWithDraft(@Param("keyword") String keyword);
+
 
     // 위치기반 조회: Course 자체엔 좌표가 없고 CourseDraft.points에 있으므로
     // 연관관계를 타고 들어가서 범위 검색

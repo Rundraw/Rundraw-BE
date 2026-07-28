@@ -18,7 +18,8 @@ public class CourseResDTO {  // server -> client
             Long courseId,
             String name,
             Integer experienceCount,
-            String description
+            String description,
+            Double distanceKm  // 추가 — 거리순 정렬 아닐 땐 null
     ) {}
 
     // 코스 상세 조회 응답
