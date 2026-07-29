@@ -1,5 +1,11 @@
 package com.example.rundrawbe.domain.mypage.dto;
 
-public class MypageReqDTO { // client -> server
+import lombok.Getter;
 
+public class MypageReqDTO {
+
+    @Getter
+    public static class UpdateDraftCourseReq {
+        private String name;
+    }
 }
