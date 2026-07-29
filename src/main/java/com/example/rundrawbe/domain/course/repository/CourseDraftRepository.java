@@ -4,7 +4,9 @@ package com.example.rundrawbe.domain.course.repository;
 import com.example.rundrawbe.domain.course.entity.CourseDraft;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+import java.util.List;
 
 @Repository
 public interface CourseDraftRepository extends JpaRepository<CourseDraft, Long> {
+    List<CourseDraft> findByMember_Id(Long memberId);
 }

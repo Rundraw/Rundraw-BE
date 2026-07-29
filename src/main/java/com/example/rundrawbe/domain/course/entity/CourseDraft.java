@@ -46,4 +46,7 @@ public class CourseDraft {
         points.add(point);
         point.setCourseDraft(this);
     }
+
+    public void updateName(String name) {
+    }
 }

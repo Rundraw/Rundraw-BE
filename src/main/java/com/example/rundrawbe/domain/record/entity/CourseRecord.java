@@ -9,6 +9,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -29,4 +31,7 @@ public class CourseRecord extends BaseEntity {
 
     @Builder.Default
     private Boolean isCompleted = false;
+
+    private LocalDateTime startAt;
+    private LocalDateTime endAt;
 }

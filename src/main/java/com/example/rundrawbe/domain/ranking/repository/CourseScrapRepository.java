@@ -6,12 +6,13 @@ import com.example.rundrawbe.domain.ranking.entity.CourseLike;
 import com.example.rundrawbe.domain.ranking.entity.CourseScrap;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-
+import java.util.List;
 import java.util.Optional;
 
 @Repository
 public interface CourseScrapRepository extends JpaRepository<CourseScrap, Long> {
     boolean existsByCourse_IdAndMember_Id(Long id, Long id1);
+    List<CourseScrap> findByMember_Id(Long memberId);
 
     Optional<CourseScrap> findByCourseAndMember(Course course, Member member);
 }

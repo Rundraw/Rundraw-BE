@@ -1,10 +1,15 @@
 package com.example.rundrawbe.domain.mypage.exception;
 
-import com.example.rundrawbe.global.apiPayload.code.BaseErrorCode;
-import com.example.rundrawbe.global.apiPayload.exception.ProjectException;
+import com.example.rundrawbe.domain.mypage.exception.code.MypageErrorCode;
+import lombok.Getter;
 
-public class MypageException extends ProjectException {
-    public MypageException(BaseErrorCode errorCode) {
-        super(errorCode);
+@Getter
+public class MypageException extends RuntimeException {
+
+    private final MypageErrorCode errorCode;
+
+    public MypageException(MypageErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
     }
 }
