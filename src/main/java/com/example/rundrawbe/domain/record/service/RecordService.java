@@ -1,5 +1,10 @@
 package com.example.rundrawbe.domain.record.service;
 
+import com.example.rundrawbe.domain.course.entity.CourseDraft;
+import com.example.rundrawbe.domain.course.entity.DraftPoint;
+import com.example.rundrawbe.domain.course.repository.CourseDraftRepository;
+import com.example.rundrawbe.domain.member.entity.Member;
+import com.example.rundrawbe.domain.member.repository.MemberRepository;
 import com.example.rundrawbe.domain.record.dto.RecordReqDTO;
 import com.example.rundrawbe.domain.record.dto.RecordResDTO;
 import com.example.rundrawbe.domain.record.entity.CourseRecord;
@@ -23,13 +28,22 @@ public class RecordService {
 
     private final CourseRecordRepository courseRecordRepository;
     private final RecordPauseRepository recordPauseRepository;
+    private final CourseDraftRepository courseDraftRepository;
+    private final MemberRepository memberRepository;
 
     // 1. 기록 시작
     public RecordResDTO.StartResult start(RecordReqDTO.Start request, Long memberId) {
+        CourseDraft courseDraft = courseDraftRepository.findById(request.courseDraftId())
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 코스입니다."));
+
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 회원입니다."));
+
         CourseRecord record = CourseRecord.builder()
                 .startAt(LocalDateTime.now())
                 .isCompleted(false)
-                // .member(...), .courseDraft(...) 는 실제 조회 후 채워야 함
+                .courseDraft(courseDraft)
+                .member(member)
                 .build();
 
         CourseRecord saved = courseRecordRepository.save(record);
@@ -92,7 +106,10 @@ public class RecordService {
         double distanceKm = calculateTotalDistance(record.getPoints()); // 하단 헬퍼 함수
         record.setDistanceKm(distanceKm);
 
-        boolean isCompleted = true; // TODO: 완주율 계산 로직 연결
+        // 완주율 계산 — 계획 경로는 courseDraft.points
+        List<DraftPoint> plannedPoints = record.getCourseDraft().getPoints();
+        double completionRate = calculateCompletionRate(plannedPoints, record.getPoints());
+        boolean isCompleted = completionRate >= COMPLETION_THRESHOLD;
         record.setIsCompleted(isCompleted);
 
         courseRecordRepository.save(record);
@@ -127,5 +144,21 @@ public class RecordService {
                 * Math.sin(dLng/2) * Math.sin(dLng/2);
         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
         return R * c * 1000; // meter 단위
+    }
+
+    // 완주율 계산
+    private static final double TOLERANCE_METERS = 30.0;
+    private static final double COMPLETION_THRESHOLD = 0.9;
+
+    private double calculateCompletionRate(List<DraftPoint> planned, List<CourseRecordPoint> actual) {
+        if (planned.isEmpty()) return 0.0;
+
+        long passedCount = planned.stream()
+                .filter(planPoint -> actual.stream().anyMatch(actualPoint ->
+                        haversine(planPoint.getLatitude(), planPoint.getLatitude(),
+                                actualPoint.getLatitude(), actualPoint.getLongitude()) <= TOLERANCE_METERS
+                ))
+                .count();
+        return (double) passedCount / planned.size();
     }
 }
