@@ -4,6 +4,9 @@ import com.example.rundrawbe.global.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
@@ -17,7 +20,12 @@ public class RecordPause extends BaseEntity {
     @JoinColumn(name = "course_record_id")
     private CourseRecord courseRecord;
 
-    private Double latitude;
+    @Column(nullable = false)
+    private LocalDateTime startAt;
 
+    @Setter
+    private LocalDateTime endAt; // 재개 시 채워짐, 그 전까지 null
+
+    private Double latitude;
     private Double longitude;
 }
