@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/user/me")
+@RequestMapping("/api/mypage")
 @RequiredArgsConstructor
 public class MypageController {
 
