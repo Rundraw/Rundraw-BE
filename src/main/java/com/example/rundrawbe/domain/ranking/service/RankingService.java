@@ -21,6 +21,8 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import java.awt.*;
+import java.util.List;
 
 @Service
 @Transactional
@@ -50,7 +52,7 @@ public class RankingService {
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RankingException(RankingErrorCode.COMMENT_NOT_FOUND));
         // 수정 권한 검토
-        if(!commentRepository.existsByIdAndMember_Id(commentId, member.getId())) {
+        if (!commentRepository.existsByIdAndMember_Id(commentId, member.getId())) {
             throw new RankingException(RankingErrorCode.COMMENT_ACCESS_DENIED);
         }
         // 댓글 수정
@@ -65,14 +67,14 @@ public class RankingService {
         // 댓글 조회
         Comment comment = commentRepository.findById(commentId)
                 .orElseThrow(() -> new RankingException(RankingErrorCode.COMMENT_NOT_FOUND));
-        if(!commentRepository.existsByIdAndCourse_Id(commentId,course.getId())){
+        if (!commentRepository.existsByIdAndCourse_Id(commentId, course.getId())) {
             throw new RankingException(RankingErrorCode.COMMENT_NOT_FOUND);
         }
-        if(comment.getDeletedAt()!=null){
+        if (comment.getDeletedAt() != null) {
             throw new RankingException(RankingErrorCode.COMMENT_ALREADY_DELETED);
         }
         // 수정 권한 검토
-        if(!commentRepository.existsByIdAndMember_Id(commentId, member.getId())) {
+        if (!commentRepository.existsByIdAndMember_Id(commentId, member.getId())) {
             throw new RankingException(RankingErrorCode.COMMENT_ACCESS_DENIED);
         }
         // 댓글 삭제
@@ -80,8 +82,10 @@ public class RankingService {
         return null;
     }
 
+
+    // 댓글 조회
     public RankingResDTO.Pagination<RankingResDTO.GetComment> getComment(
-            Long courseId, Integer pageSize, String cursor, String query
+            Long courseId, Integer pageSize, String cursor, String query, Member member
     ) {
         // 페이지 정보 생성
         PageRequest pageRequest = PageRequest.of(0, pageSize);
@@ -89,29 +93,31 @@ public class RankingService {
         Slice<Comment> commentList;
 
         // 첫 페이지 조회
-        if (cursor == null || "-1".equals(cursor)) {
-            commentList = commentRepository.findByCourse_IdOrderByIdDesc(courseId, pageRequest);
-
+        if (cursor == null||"-1".equals(cursor)) {
+            commentList = commentRepository.findByCourse_IdAndDeletedAtIsNullOrderByIdDesc(courseId, pageRequest);
         } else {
             // 커서 분리
             String[] cursorSplit = cursor.split(":");
             switch (query.toLowerCase()) {
                 case "id":
                     idCursor = Long.parseLong(cursorSplit[1]);
-                    commentList = commentRepository.findByCourse_IdAndIdLessThanOrderByIdDesc(courseId, idCursor, pageRequest);
+                    commentList = commentRepository.findByCourse_IdAndDeletedAtIsNullAndIdLessThanOrderByIdDesc(courseId, idCursor, pageRequest);
                     break;
                 default:
                     throw new RankingException(RankingErrorCode.QUERY_NOT_VALID);
             }
         }
+
         // 다음 커서 계산
         String nextCursor = null;
         if (!commentList.isEmpty() && commentList.hasNext()) {
             nextCursor = "id:" + commentList.getContent().getLast().getId();
         }
+
         // 응답 DTO 반환
-        return RankingConverter.toPagination(
-                commentList.map(RankingConverter::toGetComment).toList(),
+        return RankingConverter.toPagination(commentList.stream()
+                        .map(comment -> RankingConverter.toGetComment(comment, member))
+                        .toList(),
                 commentList.hasNext(),
                 nextCursor,
                 commentList.getNumberOfElements()
@@ -122,7 +128,7 @@ public class RankingService {
     public Object createLike(Long courseId, Member member) {
         Course course = courseFinder.findById(courseId);
         // 중복 방지
-        if(courseLikeRepository.existsByCourse_IdAndMember_Id(course.getId(), member.getId())) {
+        if (courseLikeRepository.existsByCourse_IdAndMember_Id(course.getId(), member.getId())) {
             throw new RankingException(RankingErrorCode.LIKE_ALREADY_CREATED);
         }
         // 좋아요 생성
@@ -144,7 +150,7 @@ public class RankingService {
     public Object createBookmark(Long courseId, Member member) {
         Course course = courseFinder.findById(courseId);
         // 중복 방지
-        if(courseScrapRepository.existsByCourse_IdAndMember_Id(course.getId(), member.getId())) {
+        if (courseScrapRepository.existsByCourse_IdAndMember_Id(course.getId(), member.getId())) {
             throw new RankingException(RankingErrorCode.BOOKMARK_ALREADY_CREATED);
         }
         // 북마크 생성
@@ -243,5 +249,70 @@ public class RankingService {
                 nextCursor,
                 courseList.getNumberOfElements()
         );
+    }
+
+
+    // gps art 조회
+    @Transactional(readOnly = true)
+    public RankingResDTO.Pagination<RankingResDTO.GetGpsArt> getGpsArt(
+            Integer pageSize,
+            String cursor
+    ) {
+        PageRequest pageRequest = PageRequest.of(0, pageSize);
+
+        // 좋아요 순 조회
+        Slice<Course> courseList =
+                courseRepository.findAllOrderByLikeCount(pageRequest);
+        String nextCursor = null;
+        if (!courseList.isEmpty() && courseList.hasNext()) {
+            Course lastCourse = courseList.getContent().getLast();
+            Integer likeCount = courseLikeRepository.countByCourse_Id(lastCourse.getId());
+            nextCursor = likeCount + ":" + lastCourse.getId();
+        }
+        List<RankingResDTO.GetGpsArt> result =
+                courseList.getContent()
+                        .stream()
+                        .map(course -> {
+                            Integer likeCount = courseLikeRepository.countByCourse_Id(course.getId());
+                            return RankingConverter.toGetGpsArt(
+                                    course,
+                                    likeCount
+                            );
+                        })
+                        .toList();
+
+        return RankingConverter.toPagination(
+                result,
+                courseList.hasNext(),
+                nextCursor,
+                courseList.getNumberOfElements()
+        );
+    }
+
+    // 코스 상세 조회
+    @Transactional(readOnly = true)
+    public RankingResDTO.GetCourseDetail getCourseDetail(
+            Integer courseId,
+            Member authMember
+    ) {
+        Course course = courseRepository.findById(courseId.longValue())
+                .orElseThrow(() -> new RankingException(RankingErrorCode.COURSE_NOT_FOUND));
+
+        boolean isLike = courseLikeRepository.existsByCourseIdAndMemberId(course.getId(), authMember.getId());
+        boolean isBookmark = courseScrapRepository.existsByCourseIdAndMemberId(course.getId(), authMember.getId());
+        Integer commentCount = commentRepository.countByCourseId(courseId);
+        Integer likeCount = courseLikeRepository.countByCourseId(courseId);
+        Integer bookmarkCount = courseScrapRepository.countByCourseId(courseId);
+
+        List<RankingResDTO.Point> points = course.getCourseDraft()
+                .getPoints()
+                .stream()
+                .map(point -> RankingResDTO.Point.builder()
+                                .latitude(point.getLatitude())
+                                .longitude(point.getLongitude())
+                                .build()
+                )
+                .toList();
+        return RankingConverter.toGetCourseDetail(course, isLike, isBookmark, points, commentCount, likeCount, bookmarkCount);
     }
 }
