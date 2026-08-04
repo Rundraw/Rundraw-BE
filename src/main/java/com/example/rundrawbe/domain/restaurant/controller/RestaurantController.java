@@ -4,10 +4,7 @@ import com.example.rundrawbe.domain.restaurant.dto.RestaurantResDTO;
 import com.example.rundrawbe.domain.restaurant.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*; // 이 부분에 @DeleteMapping 등이 포함됩니다.
 
 import java.util.List;
 
@@ -36,5 +33,25 @@ public class RestaurantController {
     public ResponseEntity<List<RestaurantResDTO>> getRestaurantsByCourse(@RequestParam Long courseId) {
         List<RestaurantResDTO> list = restaurantService.getRestaurantsByCourse(courseId);
         return ResponseEntity.ok(list);
+    }
+
+    /**
+     * 맛집 단건 조회 API (필요한 경우)
+     * GET /api/restaurants/{id}
+     */
+    @GetMapping("/{id}")
+    public ResponseEntity<RestaurantResDTO> getRestaurant(@PathVariable Long id) {
+        RestaurantResDTO restaurant = restaurantService.getRestaurant(id);
+        return ResponseEntity.ok(restaurant);
+    }
+
+    /**
+     * 맛집 삭제 API
+     * DELETE /api/restaurants/{id}
+     */
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteRestaurant(@PathVariable Long id) {
+        restaurantService.deleteRestaurant(id);
+        return ResponseEntity.noContent().build(); // 삭제 성공 시 보통 204 No Content 반환
     }
 }
