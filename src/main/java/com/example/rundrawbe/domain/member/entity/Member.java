@@ -37,6 +37,10 @@ public class Member extends BaseEntity {
     @NotBlank
     private String email;
 
+    @Builder.Default
+    @Column(nullable = false)
+    private Long tokenVersion = 0L;
+
     // 닉네임 설정
     public void updateName(String nickname) {
         this.name = nickname;
@@ -45,5 +49,10 @@ public class Member extends BaseEntity {
     // 유저 삭제
     public void deleteMember(Member member) {
         this.setDeletedAt(LocalDateTime.now());
+    }
+
+    // 로그아웃
+    public void increaseTokenVersion() {
+        this.tokenVersion++;
     }
 }

@@ -77,6 +77,7 @@ public class JwtUtil {
                 .subject(member.getUsername()) // User UID를 Subject로
                 .claim("role", authorities)
                 .claim("social_type", member.getMember().getSocialType())
+                .claim("token_version", member.getMember().getTokenVersion())
                 .issuedAt(Date.from(now)) // 언제 발급한지
                 .expiration(Date.from(now.plus(expiration))) // 언제까지 유효한지
                 .signWith(secretKey) // sign할 Key
@@ -100,4 +101,13 @@ public class JwtUtil {
             return null;
         }
     }
+
+    public boolean hasValidTokenVersion(String token, Long tokenVersion) {
+        try {
+            Number tokenVersionClaim = getClaims(token).getPayload().get("token_version", Number.class);
+            return tokenVersionClaim != null && tokenVersionClaim.longValue() == tokenVersion;
+        } catch (JwtException e) {
+            return false;
+        }
+     }
 }

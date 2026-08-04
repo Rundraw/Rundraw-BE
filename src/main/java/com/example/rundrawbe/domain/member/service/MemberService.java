@@ -44,4 +44,9 @@ public class MemberService {
         member.deleteMember(member);
         return memberId;
     }
+
+    public Object logout(Member member) {
+        member.increaseTokenVersion();
+        return "로그아웃";
+    }
 }
