@@ -2,7 +2,7 @@ package com.example.rundrawbe.domain.restaurant.service;
 
 import com.example.rundrawbe.domain.restaurant.dto.RestaurantResDTO;
 import com.example.rundrawbe.domain.restaurant.entity.CourseRestaurant;
-import com.example.rundrawbe.domain.restaurant.entity.Restaurant; // 💡 Restaurant 엔티티 임포트 필요
+import com.example.rundrawbe.domain.restaurant.entity.Restaurant;
 import com.example.rundrawbe.domain.restaurant.repository.CourseRestaurantRepository;
 import com.example.rundrawbe.domain.restaurant.repository.RestaurantRepository;
 import lombok.RequiredArgsConstructor;
@@ -44,7 +44,22 @@ public class RestaurantService {
     }
 
     /**
-     * 맛집 삭제 기능 (데이터 변경이 일어나므로 @Transactional 추가)
+     * 맛집 저장 기능 (프론트엔드에서 보낸 구글 식당 정보를 DB에 저장)
+     */
+    @Transactional
+    public Long saveRestaurant(Long courseId, RestaurantResDTO dto) {
+        // DTO에 정의한 toEntity() 메서드를 이용해 안전하게 엔티티 생성
+        Restaurant restaurant = dto.toEntity();
+
+        Restaurant savedRestaurant = restaurantRepository.save(restaurant);
+
+        // 만약 코스와 맛집을 연결하는 중간 테이블 저장이 필요하다면 여기에 추가 로직을 작성하시면 됩니다.
+
+        return savedRestaurant.getId();
+    }
+
+    /**
+     * 맛집 삭제 기능
      */
     @Transactional
     public void deleteRestaurant(Long id) {
