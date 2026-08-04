@@ -27,4 +27,13 @@ public class Restaurant {
     private String placeId;
 
     private String url;
+
+    public Restaurant(String restaurantName, String description, Double latitude, Double longitude, String placeId, String url) {
+        this.restaurantName = restaurantName;
+        this.description = description;
+        this.latitude = latitude;
+        this.longitude = longitude;
+        this.placeId = placeId;
+        this.url = url;
+    }
 }
