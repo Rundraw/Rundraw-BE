@@ -26,4 +26,22 @@ public class MemberService {
         member.updateName(dto.nickname());
         return dto.nickname();
     }
+
+    public String duplicateName(Long memberId, MemberReqDTO.nickname dto) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        if(memberRepository.existsByName(dto.nickname())){
+            throw new MemberException(MemberErrorCode.MEMBER_NAME_DUPLICATE);
+        }
+        return "가입가능";
+    }
+
+    public Object deleteMember(Member member) {
+        if(!memberRepository.existsById(member.getId())){
+            throw new MemberException(MemberErrorCode.MEMBER_ALREADY_DELETED);
+        }
+        Long memberId = member.getId();
+        member.deleteMember(member);
+        return memberId;
+    }
 }

@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Builder
@@ -38,5 +40,10 @@ public class Member extends BaseEntity {
     // 닉네임 설정
     public void updateName(String nickname) {
         this.name = nickname;
+    }
+
+    // 유저 삭제
+    public void deleteMember(Member member) {
+        this.setDeletedAt(LocalDateTime.now());
     }
 }
