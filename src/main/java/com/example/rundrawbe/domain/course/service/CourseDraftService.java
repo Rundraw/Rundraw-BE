@@ -60,4 +60,23 @@ public class CourseDraftService {
                 saved.getCreatedAt()
         );
     }
+
+    public CourseResDTO.DraftDetail getDraftDetail(Long courseDraftId) {
+        CourseDraft draft = courseDraftRepository.findById(courseDraftId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 코스입니다: " + courseDraftId));
+
+        List<CourseResDTO.PointDTO> pointDTOs = draft.getPoints().stream()
+                .map(p -> new CourseResDTO.PointDTO(p.getSequence(), p.getLatitude(), p.getLongitude()))
+                .collect(Collectors.toList());
+
+        Boolean isSharing = draft.getIsSharing() != null ? draft.getIsSharing() : false;
+
+        return new CourseResDTO.DraftDetail(
+                draft.getCourseDraftId(),
+                draft.getName(),
+                isSharing,
+                pointDTOs,
+                draft.getCreatedAt()
+        );
+    }
 }
