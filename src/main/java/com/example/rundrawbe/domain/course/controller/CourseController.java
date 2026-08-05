@@ -42,4 +42,9 @@ public class CourseController {
     public NavigationResDTO.NavigationList getNavigation(@PathVariable Long courseId) {
         return navigationService.generateInstructions(courseId);
     }
+
+    @GetMapping("/draft/{courseDraftId}/navigation")
+    public NavigationResDTO.NavigationList getNavigationFromDraft(@PathVariable Long courseDraftId) {
+        return navigationService.generateInstructionsFromDraft(courseDraftId);
+    }
 }
