@@ -1,6 +1,8 @@
 package com.example.rundrawbe.domain.restaurant.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -8,6 +10,8 @@ import lombok.NoArgsConstructor;
 @Table(name = "restaurant")
 @Getter
 @NoArgsConstructor
+@Builder
+@AllArgsConstructor
 public class Restaurant {
 
     @Id
@@ -28,12 +32,4 @@ public class Restaurant {
 
     private String url;
 
-    public Restaurant(String restaurantName, String description, Double latitude, Double longitude, String placeId, String url) {
-        this.restaurantName = restaurantName;
-        this.description = description;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.placeId = placeId;
-        this.url = url;
-    }
 }
