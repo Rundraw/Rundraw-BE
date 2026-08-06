@@ -1,10 +1,13 @@
 package com.example.rundrawbe.domain.restaurant.controller;
 
+import com.example.rundrawbe.domain.ranking.exception.code.RankingSuccessCode;
 import com.example.rundrawbe.domain.restaurant.exception.code.RestaurantSuccessCode;
 import com.example.rundrawbe.domain.restaurant.service.RestaurantService;
 import com.example.rundrawbe.global.apiPayload.ApiResponse;
 import com.example.rundrawbe.global.apiPayload.code.BaseSuccessCode;
+import com.example.rundrawbe.global.security.entity.AuthMember;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,7 +18,7 @@ public class RestaurantController {
     private final RestaurantService restaurantService;
 
     // 등록된 맛집 검색 : 코스 이름 검색
-    @GetMapping()
+    @GetMapping("/search")
     public ApiResponse<Object> searchRestaurant(
             @RequestParam String search
     ){
