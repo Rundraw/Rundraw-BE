@@ -16,4 +16,11 @@ public class CourseReqDTO { // client -> server
             Double latitude,
             Double longitude
     ) {}
+
+    // 코스 수정 요청
+    public record UpdateCourse(
+            String name,
+            String description,
+            String levelTagName // 예: "BEGINNER", "INTERMEDIATE", "ADVANCED"
+    ) {}
 }

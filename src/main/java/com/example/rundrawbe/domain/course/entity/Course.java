@@ -26,4 +26,18 @@ public class Course extends BaseEntity {
     private Integer experienceCount;
 
     private String description;
+
+    // 코스 정보 수정 메서드
+    public void updateCourseInfo(String name, String description, LevelTag levelTag) {
+        if (name != null) {
+            this.name = name;
+        }
+        if (description != null) {
+            this.description = description;
+        }
+        if (levelTag != null) {
+            this.levelTag = levelTag;
+        }
+    }
 }
+

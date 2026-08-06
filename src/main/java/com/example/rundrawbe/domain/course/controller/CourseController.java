@@ -1,11 +1,13 @@
 package com.example.rundrawbe.domain.course.controller;
 
+import com.example.rundrawbe.domain.course.dto.CourseReqDTO;
 import com.example.rundrawbe.domain.course.dto.CourseResDTO;
 import com.example.rundrawbe.domain.course.dto.NavigationResDTO;
 import com.example.rundrawbe.domain.course.service.CourseDraftService;
 import com.example.rundrawbe.domain.course.service.CourseService;
 import com.example.rundrawbe.domain.course.service.NavigationService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,6 +47,20 @@ public class CourseController {
     ) {
         return courseService.getByLocation(lat, lng, radius);
     }
+
+    // 코스 이름, 설명, 난이도 수정 API
+    @PatchMapping("/{courseId}")
+    public ResponseEntity<Void> updateCourse(
+            @PathVariable Long courseId,
+            @RequestBody CourseReqDTO.UpdateCourse request
+    ) {
+        courseService.updateCourse(courseId, request);
+        return ResponseEntity.ok().build();
+    }
+
+
+
+
 
     @GetMapping("/{courseId}/navigation")
     public NavigationResDTO.NavigationList getNavigation(@PathVariable Long courseId) {
