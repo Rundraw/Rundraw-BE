@@ -15,7 +15,8 @@ public enum MypageSuccessCode implements BaseSuccessCode {
     DRAFT_COURSE_LIST_SUCCESS(HttpStatus.OK, "MYPAGE2004", "내가 그린 코스 목록 조회에 성공했습니다."),
     DRAFT_COURSE_DETAIL_SUCCESS(HttpStatus.OK, "MYPAGE2005", "코스 초안 상세 조회에 성공했습니다."),
     DRAFT_COURSE_UPDATE_SUCCESS(HttpStatus.OK, "MYPAGE2006", "코스 초안 수정에 성공했습니다."),
-    DRAFT_COURSE_DELETE_SUCCESS(HttpStatus.OK, "MYPAGE2007", "코스 초안 삭제에 성공했습니다.");
+    DRAFT_COURSE_DELETE_SUCCESS(HttpStatus.OK, "MYPAGE2007", "코스 초안 삭제에 성공했습니다."),
+    DRAFT_COURSE_SHARE_TOGGLE_SUCCESS(HttpStatus.OK, "MYPAGE2008", "코스 공유 상태 변경에 성공했습니다.");
 
     private final HttpStatus status;
     private final String code;
