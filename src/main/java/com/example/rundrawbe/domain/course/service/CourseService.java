@@ -89,4 +89,15 @@ public class CourseService {
                 ))
                 .collect(Collectors.toList());
     }
+
+    public void updateCourse(Long courseId, com.example.rundrawbe.domain.course.dto.CourseReqDTO.UpdateCourse request) {
+        Course course = courseRepository.findById(courseId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 코스입니다: " + courseId));
+
+        // 만약 levelTagName으로 LevelTag를 찾아와야 한다면 여기서 조회 로직을 추가할 수 있어.
+        // 예: LevelTag levelTag = levelTagRepository.findByLevelType(LevelType.valueOf(request.levelTagName())).orElse(null);
+
+        // 현재는 이름과 설명 위주로 수정하는 예시
+        course.updateCourseInfo(request.name(), request.description(), null);
+    }
 }
