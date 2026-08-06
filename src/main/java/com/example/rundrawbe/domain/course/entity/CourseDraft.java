@@ -22,7 +22,6 @@ import java.util.List;
 public class CourseDraft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "course_draft_id")
     private Long id;
 
     @Column(nullable = false)
