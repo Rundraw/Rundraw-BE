@@ -20,6 +20,4 @@ public interface CommentRepository extends JpaRepository<Comment, Long> {
     Slice<Comment> findByCourse_IdAndDeletedAtIsNullOrderByIdDesc(Long courseId, PageRequest pageRequest);
 
     Slice<Comment> findByCourse_IdAndDeletedAtIsNullAndIdLessThanOrderByIdDesc(Long courseId, long idCursor, PageRequest pageRequest);
-
-    List<Comment> findByMember_IdAndDeletedAtIsNullOrderByCreatedAtDesc(Long memberId);
 }
