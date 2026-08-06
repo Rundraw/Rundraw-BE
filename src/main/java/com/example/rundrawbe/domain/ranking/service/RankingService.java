@@ -316,4 +316,17 @@ public class RankingService {
                 .toList();
         return RankingConverter.toGetCourseDetail(course, isLike, isBookmark, points, commentCount, likeCount, bookmarkCount, courseDraftId);
     }
-}
+
+    // 댓글 삭제 mypage
+    public Object deleteMyComment(Long commentId, Member member) {
+            // 댓글 조회
+            Comment comment = commentRepository.findById(commentId)
+                    .orElseThrow(() -> new RankingException(RankingErrorCode.COMMENT_NOT_FOUND));
+            if (comment.getDeletedAt() != null) {
+                throw new RankingException(RankingErrorCode.COMMENT_ALREADY_DELETED);
+            }
+            // 댓글 삭제
+            comment.deleteComment();
+            return null;
+        }
+    }
