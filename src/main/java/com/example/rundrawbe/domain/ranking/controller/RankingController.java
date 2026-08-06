@@ -7,7 +7,6 @@ import com.example.rundrawbe.domain.ranking.service.RankingService;
 import com.example.rundrawbe.global.apiPayload.ApiResponse;
 import com.example.rundrawbe.global.apiPayload.code.BaseSuccessCode;
 import com.example.rundrawbe.global.security.entity.AuthMember;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -59,10 +58,11 @@ public class RankingController {
             @PathVariable Long courseId,
             @RequestParam Integer pageSize,
             @RequestParam String cursor,
-            @RequestParam String query
+            @RequestParam String query,
+            @AuthenticationPrincipal AuthMember authMember
     ){
         BaseSuccessCode code = RankingSuccessCode.COMMENT_GET_SUCCESS;
-        return ApiResponse.onSuccess(code, rankingService.getComment(courseId, pageSize, cursor, query));
+        return ApiResponse.onSuccess(code, rankingService.getComment(courseId, pageSize, cursor, query, authMember.getMember()));
     }
 
     // 좋아요 생성
@@ -106,4 +106,46 @@ public class RankingController {
         BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
         return ApiResponse.onSuccess(code, rankingService.deleteBookmark(courseId, authMember.getMember()));
     }
+
+    // 코스 랭킹순 조회
+    @GetMapping("/ranking/courses/rank")
+    public ApiResponse<Object> getRanking(
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.getRanking(pageSize, cursor));
+    }
+
+    // 코스 난이도 조회
+    @GetMapping("/ranking/courses")
+    public ApiResponse<Object> getLevelCourses(
+            @RequestParam(required = false) String level,
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.getLevelCourses(level, pageSize, cursor));
+    }
+
+    // gps art 조회
+    @GetMapping("/ranking/art")
+    public ApiResponse<Object> getGpsArt(
+            @RequestParam Integer pageSize,
+            @RequestParam String cursor
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.getGpsArt(pageSize, cursor));
+    }
+
+    // 코스 상세 조회
+    @GetMapping("ranking/courses/{courseId}")
+    public ApiResponse<Object> getCourseDetail(
+            @PathVariable Integer courseId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.BOOKMARK_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.getCourseDetail(courseId, authMember.getMember()));
+    }
+
 }

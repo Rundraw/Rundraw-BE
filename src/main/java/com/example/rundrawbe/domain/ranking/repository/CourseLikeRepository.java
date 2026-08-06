@@ -12,4 +12,10 @@ public interface CourseLikeRepository extends JpaRepository<CourseLike, Long> {
     boolean existsByCourse_IdAndMember_Id(Long id, Long id1);
 
     Optional<CourseLike> findByCourseAndMember(Course course, Member member);
+
+    Integer countByCourse_Id(Long id);
+
+    boolean existsByCourseIdAndMemberId(Long courseId, Long memberId);
+
+    Integer countByCourseId(Integer courseId);
 }

@@ -22,6 +22,7 @@ import java.util.List;
 public class CourseDraft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long courseDraftId;
 
     @Column(nullable = false)
@@ -45,5 +46,8 @@ public class CourseDraft {
     public void addPoint(DraftPoint point){
         points.add(point);
         point.setCourseDraft(this);
+    }
+
+    public void updateName(String name) {
     }
 }

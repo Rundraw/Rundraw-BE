@@ -2,7 +2,10 @@ package com.example.rundrawbe.domain.course.controller;
 
 import com.example.rundrawbe.domain.course.dto.CourseReqDTO;
 import com.example.rundrawbe.domain.course.dto.CourseResDTO;
+import com.example.rundrawbe.domain.course.dto.NavigationResDTO;
+import com.example.rundrawbe.domain.course.service.CourseDraftService;
 import com.example.rundrawbe.domain.course.service.CourseService;
+import com.example.rundrawbe.domain.course.service.NavigationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +17,14 @@ import java.util.List;
 @RequestMapping("/api/course")
 public class CourseController {
     private final CourseService courseService;
+    private final NavigationService navigationService;
+    private final CourseDraftService courseDraftService;
+
+    // CourseController.java 에 추가
+    @GetMapping("/draft/{courseDraftId}")
+    public CourseResDTO.DraftDetail getCourseDraft(@PathVariable Long courseDraftId) {
+        return courseDraftService.getDraftDetail(courseDraftId);   // ← 반환 타입 수정
+    }
 
     @GetMapping("/{courseId}")
     public CourseResDTO.Detail getDetail(@PathVariable Long courseId) {
@@ -51,4 +62,13 @@ public class CourseController {
 
 
 
+    @GetMapping("/{courseId}/navigation")
+    public NavigationResDTO.NavigationList getNavigation(@PathVariable Long courseId) {
+        return navigationService.generateInstructions(courseId);
+    }
+
+    @GetMapping("/draft/{courseDraftId}/navigation")
+    public NavigationResDTO.NavigationList getNavigationFromDraft(@PathVariable Long courseDraftId) {
+        return navigationService.generateInstructionsFromDraft(courseDraftId);
+    }
 }

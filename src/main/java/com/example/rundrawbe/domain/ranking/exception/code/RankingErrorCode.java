@@ -17,8 +17,10 @@ public enum RankingErrorCode implements BaseErrorCode {
     LIKE_ALREADY_CREATED(HttpStatus.NOT_FOUND, "LIKE404_1", "이미 좋아요된 코스입니다."),
     LIKE_NOT_FOUND(HttpStatus.NOT_FOUND, "LIKE404_1", "해당 좋아요를 찾을 수 없습니다."),
     BOOKMARK_ALREADY_CREATED(HttpStatus.NOT_FOUND, "BOOKMARK404_1", "이미 북마크된 코스입니다."),
-    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOKMARK404_1", "해당 북마크를 찾을 수 없습니다.");
-
+    BOOKMARK_NOT_FOUND(HttpStatus.NOT_FOUND, "BOOKMARK404_1", "해당 북마크를 찾을 수 없습니다."),
+    SORT_NOT_VALID(HttpStatus.NOT_FOUND, "SORT404_1", "해당 정렬을 찾을 수 없습니다."),
+    LEVEL_NOT_VALID(HttpStatus.NOT_FOUND, "LEVEL404_1", "해당 레벨을 찾을 수 없습니다.");
+    
     private final HttpStatus status;
     private final String code;
     private final String message;

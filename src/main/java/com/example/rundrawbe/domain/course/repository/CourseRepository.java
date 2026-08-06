@@ -2,6 +2,10 @@ package com.example.rundrawbe.domain.course.repository;
 /* 상세조회 + 검색 + 위치기반 조회 */
 
 import com.example.rundrawbe.domain.course.entity.Course;
+import com.example.rundrawbe.domain.course.enums.LevelType;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -39,4 +43,24 @@ public interface CourseRepository extends JpaRepository<Course, Long> {
             @Param("minLng") Double minLng, @Param("maxLng") Double maxLng
     );
 
+    Slice<Course> findAllByOrderByIdDesc(PageRequest pageRequest);
+
+    Slice<Course> findByIdLessThanOrderByIdDesc(long idCursor, PageRequest pageRequest);
+
+    Slice<Course> findAllByOrderByExperienceCountDescIdDesc(PageRequest pageRequest);
+
+    Slice<Course> findByIdLessThanOrderByExperienceCountDescIdDesc(long idCursor, PageRequest pageRequest);
+
+    Slice<Course> findByLevelTag_LevelTypeOrderByIdDesc(LevelType levelType, PageRequest pageRequest);
+
+    Slice<Course> findByLevelTag_LevelTypeAndIdLessThanOrderByIdDesc(LevelType levelType, Long idCursor, PageRequest pageRequest);
+
+    @Query("""
+        SELECT c
+        FROM Course c
+        LEFT JOIN CourseLike cl ON cl.course = c
+        GROUP BY c
+        ORDER BY COUNT(cl) DESC, c.id DESC
+    """)
+    Slice<Course> findAllOrderByLikeCount(Pageable pageable);
 }

@@ -7,7 +7,6 @@ import com.example.rundrawbe.domain.ranking.dto.RankingResDTO;
 import com.example.rundrawbe.domain.ranking.entity.Comment;
 import com.example.rundrawbe.domain.ranking.entity.CourseLike;
 import com.example.rundrawbe.domain.ranking.entity.CourseScrap;
-
 import java.util.List;
 
 public class RankingConverter {
@@ -39,12 +38,13 @@ public class RankingConverter {
                 .build();
     }
 
-    public static RankingResDTO.GetComment toGetComment(Comment comment) {
+    public static RankingResDTO.GetComment toGetComment(Comment comment, Member member) {
         return RankingResDTO.GetComment.builder()
                 .id(comment.getId())
                 .memberName(comment.getMember().getName())
-                .createdAt(comment.getCreatedAt())
                 .content(comment.getContent())
+                .createdAt(comment.getCreatedAt())
+                .isMine(comment.getMember().getId().equals(member.getId()))
                 .build();
     }
 
@@ -59,6 +59,59 @@ public class RankingConverter {
         return CourseScrap.builder()
                 .member(member)
                 .course(course)
+                .build();
+    }
+
+    public static RankingResDTO.GetRanking toGetRanking(Course course){
+        return RankingResDTO.GetRanking.builder()
+                .id(course.getId())
+                .name(course.getName())
+                .experienceCount(course.getExperienceCount())
+                .build();
+    }
+
+    public static RankingResDTO.GetGpsArt toGetGpsArt(
+            Course course,
+            Integer likeCount
+    ) {
+        List<RankingResDTO.Point> points = course.getCourseDraft()
+                .getPoints()
+                .stream()
+                .map(point -> RankingResDTO.Point.builder()
+                        .latitude(point.getLatitude())
+                        .longitude(point.getLongitude())
+                        .build()
+                )
+                .toList();
+        return RankingResDTO.GetGpsArt.builder()
+                .id(course.getId())
+                .name(course.getName())
+                .likeCount(likeCount)
+                .points(points)
+                .build();
+    }
+
+    public static RankingResDTO.GetCourseDetail toGetCourseDetail(
+            Course course,
+            boolean isLike,
+            boolean isBookmark,
+            List<RankingResDTO.Point> points,
+            Integer commentCount,
+            Integer likeCount,
+            Integer bookmarkCount
+    ){
+        return RankingResDTO.GetCourseDetail.builder()
+                .courseId(course.getId())
+                .name(course.getName())
+                .content(course.getDescription())
+                .levelType(course.getLevelTag().getLevelType())
+                .user(course.getCourseDraft().getMember().getName())
+                .isLike(isLike)
+                .isBookmark(isBookmark)
+                .points(points)
+                .commentCount(commentCount)
+                .bookmarkCount(bookmarkCount)
+                .likeCount(likeCount)
                 .build();
     }
 }

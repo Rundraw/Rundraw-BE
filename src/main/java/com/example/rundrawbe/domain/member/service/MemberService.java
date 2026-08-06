@@ -26,4 +26,13 @@ public class MemberService {
         member.updateName(dto.nickname());
         return dto.nickname();
     }
+
+    public String duplicateName(Long memberId, MemberReqDTO.nickname dto) {
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(() -> new MemberException(MemberErrorCode.MEMBER_NOT_FOUND));
+        if(memberRepository.existsByName(dto.nickname())){
+            throw new MemberException(MemberErrorCode.MEMBER_NAME_DUPLICATE);
+        }
+        return "가입가능";
+    }
 }

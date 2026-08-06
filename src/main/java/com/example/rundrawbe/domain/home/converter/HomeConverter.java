@@ -11,10 +11,10 @@ public class HomeConverter {
     public static HomeResDTO.MyCourseDTO toMyCourseDTO(CourseRecord record) {
         return HomeResDTO.MyCourseDTO.builder()
                 .courseRecordId(record.getId())
-                .courseDraftId(record.getCourseDraft().getId())
+                .courseDraftId(record.getCourseDraft().getCourseDraftId())
                 .courseName(record.getCourseDraft().getName())
                 .isCompleted(record.getIsCompleted())
-                .recordedAt(record.getCreatedAt()) // TODO: BaseEntity에 getCreatedAt()이 없으면 이름 맞춰주세요
+                .recordedAt(record.getCreatedAt())
                 .build();
     }
 
