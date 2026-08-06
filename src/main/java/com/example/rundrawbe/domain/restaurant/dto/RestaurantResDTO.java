@@ -16,5 +16,11 @@ public class RestaurantResDTO {
             Double longitude,
             Double latitude
     ){}
-
+    @Builder
+    public record getMap(
+            Long id,
+            String placeId,
+            Double latitude,
+            Double longitude
+    ){}
 }
