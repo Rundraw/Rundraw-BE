@@ -35,4 +35,8 @@ public class MemberService {
         }
         return "가입가능";
     }
+
+    public String getName(Member member) {
+        return member.getName();
+    }
 }

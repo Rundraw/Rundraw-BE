@@ -38,5 +38,12 @@ public class MemberController {
         return ApiResponse.onSuccess(code, memberService.duplicateName(authMember.getMember().getId(), dto));
     }
 
-
+    // 사용자 이름
+    @GetMapping("/users/me/name")
+    public ApiResponse<String> getName(
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = MemberSuccessCode.MEMBER_GET_SUCCESS;
+        return ApiResponse.onSuccess(code, memberService.getName(authMember.getMember()));
+    }
 }
