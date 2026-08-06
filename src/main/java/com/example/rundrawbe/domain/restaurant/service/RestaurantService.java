@@ -44,4 +44,20 @@ public class RestaurantService {
                 )
                 .collect(Collectors.toList());
     }
+
+    public List<RestaurantResDTO.SearchRestaurant> getRestaurant() {
+        return courseRestaurantRepository.findAll()
+                .stream()
+                .map(courseRestaurant ->
+                        RestaurantResDTO.SearchRestaurant.builder()
+                                .restaurantCourseId(courseRestaurant.getId())
+                                .restaurantName(courseRestaurant.getRestaurant().getRestaurantName())
+                                .courseName(courseRestaurant.getCourse().getName())
+                                .placeId(courseRestaurant.getRestaurant().getPlaceId())
+                                .latitude(courseRestaurant.getRestaurant().getLatitude())
+                                .longitude(courseRestaurant.getRestaurant().getLongitude())
+                                .build()
+                )
+                .collect(Collectors.toList());
+    }
 }
