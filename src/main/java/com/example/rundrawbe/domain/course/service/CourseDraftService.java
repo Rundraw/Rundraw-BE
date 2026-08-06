@@ -53,7 +53,7 @@ public class CourseDraftService {
                 .collect(Collectors.toList());
 
         return new CourseResDTO.DraftDetail(
-                saved.getCourseDraftId(),
+                saved.getId(),
                 saved.getName(),
                 saved.getIsSharing(),
                 pointDTOs,

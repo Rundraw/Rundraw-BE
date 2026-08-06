@@ -56,7 +56,7 @@ public class MypageService {
     }
 
     public List<DraftPoint> getDraftPoints(Long draftCourseId) {
-        return draftPointRepository.findByCourseDraft_CourseDraftIdOrderBySequenceAsc(draftCourseId);
+        return draftPointRepository.findByCourseDraft_IdOrderBySequenceAsc(draftCourseId);
     }
 
     @Transactional

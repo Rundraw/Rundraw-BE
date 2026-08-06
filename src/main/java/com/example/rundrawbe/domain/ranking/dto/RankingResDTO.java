@@ -62,6 +62,7 @@ public class RankingResDTO {
             Integer commentCount,
             Integer likeCount,
             Integer bookmarkCount,
+            Long coursedraftId,
             List<Point> points
     ){}
 }

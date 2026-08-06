@@ -10,10 +10,11 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class DraftPoint extends PointBaseEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long pointId;
+    @Column(name = "point_id")
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "course_draft_id")

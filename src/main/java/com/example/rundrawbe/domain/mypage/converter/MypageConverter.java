@@ -49,7 +49,7 @@ public class MypageConverter {
         CourseDraft draft = record.getCourseDraft();
         return MypageResDTO.CourseRecordDTO.builder()
                 .experienceRecordId(record.getId())
-                .courseDraftId(draft != null ? draft.getCourseDraftId() : null)
+                .courseDraftId(draft != null ? draft.getId() : null)
                 .courseName(draft != null ? draft.getName() : null)
                 .isCompleted(record.getIsCompleted())
                 .startAt(record.getStartAt())
@@ -65,7 +65,7 @@ public class MypageConverter {
 
     public static MypageResDTO.DraftCourseDTO toDraftCourseDTO(CourseDraft draft) {
         return MypageResDTO.DraftCourseDTO.builder()
-                .draftCourseId(draft.getCourseDraftId())
+                .draftCourseId(draft.getId())
                 .name(draft.getName())
                 .isSharing(draft.getIsSharing())
                 .build();
@@ -87,7 +87,7 @@ public class MypageConverter {
 
     public static MypageResDTO.DraftCourseDetailDTO toDraftCourseDetailDTO(CourseDraft draft, List<DraftPoint> points) {
         return MypageResDTO.DraftCourseDetailDTO.builder()
-                .draftCourseId(draft.getCourseDraftId())
+                .draftCourseId(draft.getId())
                 .name(draft.getName())
                 .isSharing(draft.getIsSharing())
                 .points(points.stream().map(MypageConverter::toDraftPointDTO).collect(Collectors.toList()))
