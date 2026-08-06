@@ -16,6 +16,9 @@ public class OAuthMember implements OAuth2User {
     private final Member member;
     private final Map<String, Object> attributes;
 
+    @Getter
+    private final boolean isNewMember;
+
     @Override
     public Map<String, Object> getAttributes() {
         return attributes;

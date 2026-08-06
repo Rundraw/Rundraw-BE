@@ -16,7 +16,8 @@ public enum RankingSuccessCode implements BaseSuccessCode {
     LIKE_DELETE_SUCCESS(HttpStatus.OK, "LIKE200_1", "성공적으로 좋아요를 삭제했습니다."),
     LIKE_CREATE_SUCCESS(HttpStatus.CREATED, "LIKE201_1", "성공적으로 좋아요를 생성했습니다."),
     BOOKMARK_DELETE_SUCCESS(HttpStatus.OK, "BOOKMARK200_1", "성공적으로 북마크를 삭제했습니다."),
-    BOOKMARK_CREATE_SUCCESS(HttpStatus.CREATED, "BOOKMARK201_1", "성공적으로 북마크를 생성했습니다.");
+    BOOKMARK_CREATE_SUCCESS(HttpStatus.CREATED, "BOOKMARK201_1", "성공적으로 북마크를 생성했습니다."),
+    RANKING_GET_SUCCESS(HttpStatus.OK, "RANKING200_1", "성공적으로 랭킹을 조회했습니다.");
 
     private final HttpStatus status;
     private final String code;

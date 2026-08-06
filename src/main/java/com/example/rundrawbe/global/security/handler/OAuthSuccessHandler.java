@@ -56,8 +56,9 @@ public class OAuthSuccessHandler implements AuthenticationSuccessHandler {
 //        // 테스트 코드(앱 연동X)--end
 
         // 앱 연동 코드
-        response.sendRedirect(
-                "rundraw://login?accessToken=" + URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
-        );
+        response.sendRedirect("rundraw://login?" + "accessToken=" + URLEncoder.encode(
+                accessToken,
+                StandardCharsets.UTF_8)
+                + "&isNewMember=" + member.isNewMember());
     }
 }

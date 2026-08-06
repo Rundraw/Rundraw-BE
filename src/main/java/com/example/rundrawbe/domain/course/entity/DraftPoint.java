@@ -12,6 +12,7 @@ import lombok.Setter;
 public class DraftPoint extends PointBaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long pointId;
 
     @ManyToOne(fetch = FetchType.LAZY)

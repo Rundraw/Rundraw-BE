@@ -34,7 +34,8 @@ public class SecurityConfig {
             "/swagger-resources/**",
             "/v3/api-docs/**",
             "/oauth2/**",
-            "/login"
+            "/login",
+            "/api/course/**"  // TODO: 테스트용 임시 허용, 테스트 끝나면 반드시 제거!
     };
 
     @Bean
