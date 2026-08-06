@@ -303,6 +303,7 @@ public class RankingService {
         Integer commentCount = commentRepository.countByCourseId(courseId);
         Integer likeCount = courseLikeRepository.countByCourseId(courseId);
         Integer bookmarkCount = courseScrapRepository.countByCourseId(courseId);
+        Long courseDraftId = course.getCourseDraft().getId();
 
         List<RankingResDTO.Point> points = course.getCourseDraft()
                 .getPoints()
@@ -313,6 +314,6 @@ public class RankingService {
                                 .build()
                 )
                 .toList();
-        return RankingConverter.toGetCourseDetail(course, isLike, isBookmark, points, commentCount, likeCount, bookmarkCount);
+        return RankingConverter.toGetCourseDetail(course, isLike, isBookmark, points, commentCount, likeCount, bookmarkCount, courseDraftId);
     }
 }

@@ -7,5 +7,5 @@ import java.util.List;
 
 @Repository
 public interface DraftPointRepository extends JpaRepository<DraftPoint, Long> {
-    List<DraftPoint> findByCourseDraft_CourseDraftIdOrderBySequenceAsc(Long courseDraftId);
+    List<DraftPoint> findByCourseDraft_IdOrderBySequenceAsc(Long courseDraftId);
 }

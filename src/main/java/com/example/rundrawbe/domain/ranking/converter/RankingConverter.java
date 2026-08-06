@@ -98,7 +98,8 @@ public class RankingConverter {
             List<RankingResDTO.Point> points,
             Integer commentCount,
             Integer likeCount,
-            Integer bookmarkCount
+            Integer bookmarkCount,
+            Long courseDraftId
     ){
         return RankingResDTO.GetCourseDetail.builder()
                 .courseId(course.getId())
@@ -112,6 +113,7 @@ public class RankingConverter {
                 .commentCount(commentCount)
                 .bookmarkCount(bookmarkCount)
                 .likeCount(likeCount)
+                .coursedraftId(courseDraftId)
                 .build();
     }
 }

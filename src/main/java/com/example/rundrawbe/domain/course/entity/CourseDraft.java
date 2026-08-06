@@ -22,8 +22,8 @@ import java.util.List;
 public class CourseDraft {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long courseDraftId;
+    @Column(name = "course_draft_id")
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -35,19 +35,20 @@ public class CourseDraft {
     @Column(nullable = false)
     private Boolean isSharing = false;
 
-    @OneToMany(mappedBy = "courseDraft", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "courseDraft",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     @Builder.Default
     private List<DraftPoint> points = new ArrayList<>();
 
     @CreatedDate
     private LocalDateTime createdAt;
 
-    // 연관관계 편의 메서드 — points를 추가할 때 양쪽 다 세팅해주는 헬퍼
     public void addPoint(DraftPoint point){
         points.add(point);
         point.setCourseDraft(this);
     }
 
-    public void updateName(String name) {
-    }
+    public void updateName(String name) { }
+
 }

@@ -11,7 +11,7 @@ public class HomeConverter {
     public static HomeResDTO.MyCourseDTO toMyCourseDTO(CourseRecord record) {
         return HomeResDTO.MyCourseDTO.builder()
                 .courseRecordId(record.getId())
-                .courseDraftId(record.getCourseDraft().getCourseDraftId())
+                .courseDraftId(record.getCourseDraft().getId())
                 .courseName(record.getCourseDraft().getName())
                 .isCompleted(record.getIsCompleted())
                 .recordedAt(record.getCreatedAt())
