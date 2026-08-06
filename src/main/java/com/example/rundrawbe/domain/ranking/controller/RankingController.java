@@ -148,4 +148,14 @@ public class RankingController {
         return ApiResponse.onSuccess(code, rankingService.getCourseDetail(courseId, authMember.getMember()));
     }
 
+    // mypage 댓글 삭제
+    @DeleteMapping("/mypage/comments/{commentId}")
+    public ApiResponse<Object> deleteMyComment(
+            @PathVariable Long commentId,
+            @AuthenticationPrincipal AuthMember authMember
+    ){
+        BaseSuccessCode code = RankingSuccessCode.COMMENT_DELETE_SUCCESS;
+        return ApiResponse.onSuccess(code, rankingService.deleteMyComment(commentId, authMember.getMember()));
+    }
+
 }
