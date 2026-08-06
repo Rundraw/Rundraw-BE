@@ -9,4 +9,7 @@ import java.util.List;
 public interface CourseRecordRepository extends JpaRepository<CourseRecord, Long> {
     List<CourseRecord> findByMember_Id(Long memberId);
     List<CourseRecord> findByMember_IdAndIsCompletedTrue(Long memberId);
+
+    // 공유 토글 시 완주 여부 단건 확인용
+    boolean existsByMember_IdAndCourseDraft_IdAndIsCompletedTrue(Long memberId, Long courseDraftId);
 }
