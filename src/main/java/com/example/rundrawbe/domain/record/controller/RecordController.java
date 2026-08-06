@@ -3,7 +3,9 @@ package com.example.rundrawbe.domain.record.controller;
 import com.example.rundrawbe.domain.record.dto.RecordReqDTO;
 import com.example.rundrawbe.domain.record.dto.RecordResDTO;
 import com.example.rundrawbe.domain.record.service.RecordService;
+import com.example.rundrawbe.global.security.entity.AuthMember;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -13,9 +15,12 @@ public class RecordController {
     private final RecordService recordService;
 
     @PostMapping("/record")
-    public RecordResDTO.StartResult start(@RequestBody RecordReqDTO.Start request) {
-        Long tempMemberId = 4L; // 존재하는 member id로 맞춤
-        return recordService.start(request, tempMemberId);
+    public RecordResDTO.StartResult start(
+            @RequestBody RecordReqDTO.Start request,
+            @AuthenticationPrincipal AuthMember authMember
+            ) {
+        Long memberId = authMember.getMember().getId();
+        return recordService.start(request, memberId);
     }
 
     @PostMapping("/point")
