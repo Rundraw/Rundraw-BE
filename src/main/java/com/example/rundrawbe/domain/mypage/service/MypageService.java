@@ -40,7 +40,7 @@ public class MypageService {
     private final MypageCourseLookupRepository mypageCourseLookupRepository; // ★ 추가
 
     public List<Comment> getMyComments(Long memberId) {
-        return commentRepository.findByMember_IdOrderByCreatedAtDesc(memberId);
+        return commentRepository.findByMember_IdAndDeletedAtIsNullOrderByCreatedAtDesc(memberId);
     }
 
     public List<CourseScrap> getMyScrapCourses(Long memberId) {
