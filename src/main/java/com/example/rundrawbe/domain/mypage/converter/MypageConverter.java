@@ -9,6 +9,8 @@ import com.example.rundrawbe.domain.ranking.entity.CourseScrap;
 import com.example.rundrawbe.domain.record.entity.CourseRecord;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 public class MypageConverter {
@@ -63,6 +65,7 @@ public class MypageConverter {
                 .build();
     }
 
+    // 기존: isCompleted 정보 없이 변환 (다른 곳에서 계속 쓰고 있으면 유지)
     public static MypageResDTO.DraftCourseDTO toDraftCourseDTO(CourseDraft draft) {
         return MypageResDTO.DraftCourseDTO.builder()
                 .draftCourseId(draft.getId())
@@ -71,9 +74,37 @@ public class MypageConverter {
                 .build();
     }
 
+    // ★ 추가: isCompleted, courseId(승격 여부) 포함 변환
+    public static MypageResDTO.DraftCourseDTO toDraftCourseDTO(CourseDraft draft, boolean isCompleted, Long courseId) {
+        return MypageResDTO.DraftCourseDTO.builder()
+                .draftCourseId(draft.getId())
+                .name(draft.getName())
+                .isSharing(draft.getIsSharing())
+                .isCompleted(isCompleted)
+                .courseId(courseId)
+                .build();
+    }
+
     public static MypageResDTO.DraftCourseListDTO toDraftCourseListDTO(List<CourseDraft> drafts) {
         return MypageResDTO.DraftCourseListDTO.builder()
                 .draftCourses(drafts.stream().map(MypageConverter::toDraftCourseDTO).collect(Collectors.toList()))
+                .build();
+    }
+
+    // ★ 추가: 완주한 draftId 집합 + (draftId -> courseId) 매핑을 받아서 채워 변환
+    public static MypageResDTO.DraftCourseListDTO toDraftCourseListDTO(
+            List<CourseDraft> drafts,
+            Set<Long> completedDraftIds,
+            Map<Long, Long> draftIdToCourseIdMap
+    ) {
+        return MypageResDTO.DraftCourseListDTO.builder()
+                .draftCourses(drafts.stream()
+                        .map(draft -> toDraftCourseDTO(
+                                draft,
+                                completedDraftIds.contains(draft.getId()),
+                                draftIdToCourseIdMap.get(draft.getId())
+                        ))
+                        .collect(Collectors.toList()))
                 .build();
     }
 

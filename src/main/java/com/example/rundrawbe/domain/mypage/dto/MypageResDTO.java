@@ -54,11 +54,20 @@ public class MypageResDTO {
         private Long draftCourseId;
         private String name;
         private Boolean isSharing;
+        private Boolean isCompleted; // ★ 추가
+        private Long courseId; // ★ 추가: 완주 후 승격된 Course의 id (승격 전이면 null)
     }
 
     @Getter @Builder
     public static class DraftCourseListDTO {
         private List<DraftCourseDTO> draftCourses;
+    }
+
+    // ★ 추가: 공유 토글 API 응답 전용 DTO
+    @Getter @Builder
+    public static class DraftCourseShareDTO {
+        private Long draftCourseId;
+        private Boolean isSharing;
     }
 
     @Getter @Builder
