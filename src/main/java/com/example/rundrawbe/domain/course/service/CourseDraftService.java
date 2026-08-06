@@ -72,7 +72,7 @@ public class CourseDraftService {
         Boolean isSharing = draft.getIsSharing() != null ? draft.getIsSharing() : false;
 
         return new CourseResDTO.DraftDetail(
-                draft.getCourseDraftId(),
+                draft.getId(),
                 draft.getName(),
                 isSharing,
                 pointDTOs,
